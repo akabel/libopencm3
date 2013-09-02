@@ -140,7 +140,7 @@ def makeparentdir(filename):
 def main():
     infile = sys.argv[1]
     if not infile.startswith('./include/libopencm3/') or not infile.endswith('/irq.yaml'):
-        raise ValueError("Arguent must match ./include/libopencm3/**/irq.yaml")
+        raise ValueError("Argument must match ./include/libopencm3/**/irq.yaml")
     nvic_h = infile.replace('irq.yaml', 'nvic.h')
     vector_nvic_c = infile.replace('./include/libopencm3/', './lib/').replace('irq.yaml', 'vector_nvic.c')
     cmsis = infile.replace('irq.yaml', 'irqhandlers.h').replace('/libopencm3/', '/libopencmsis/')

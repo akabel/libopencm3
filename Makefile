@@ -54,16 +54,12 @@ all: build
 
 build: lib
 
-%/nvic.h: %/irq.yaml ./scripts/irq2nvic_h
+%/nvic.h: %/irq.yaml  ./scripts/irq2nvic_h 
 	@printf "  GENHDR  ./$<\n";
-	@./scripts/irq2nvic_h ./$<;
-
-%/irq.yaml.cleanhdr: 
-	@printf "  CLNHDR  $*\n";
-	$(Q)rm -f $*/nvic.h 
+	$(Q) ./scripts/irq2nvic_h ./$<  
 
 LIB_DIRS:=$(wildcard $(addprefix lib/,$(TARGETS)))
-$(LIB_DIRS): $(YAMLFILES:irq.yaml=nvic.h)
+$(LIB_DIRS): $(YAMLFILES:/irq.yaml=/nvic.h)
 	@printf "  BUILD   $@\n";
 	$(Q)$(MAKE) --directory=$@ SRCLIBDIR=$(SRCLIBDIR)
 
@@ -89,7 +85,9 @@ install: lib
 doc:
 	$(Q)$(MAKE) -C doc html
 
-clean: $(YAMLFILES:=.cleanhdr) $(LIB_DIRS:=.clean) $(EXAMPLE_DIRS:=.clean) doc.clean styleclean
+hdrclean: $(YAMLFILES:/irq.yaml=/nvic.h.clean)
+
+clean:  $(LIB_DIRS:=.clean) $(EXAMPLE_DIRS:=.clean) doc.clean styleclean hdrclean
 
 %.clean:
 	$(Q)if [ -d $* ]; then \

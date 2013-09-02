@@ -60,7 +60,7 @@ build: lib
 
 %/irq.yaml.cleanhdr: 
 	@printf "  CLNHDR  $*\n";
-	-rm $*/nvic.h
+	$(Q)rm -f $*/nvic.h 
 
 LIB_DIRS:=$(wildcard $(addprefix lib/,$(TARGETS)))
 $(LIB_DIRS): $(YAMLFILES:irq.yaml=nvic.h)

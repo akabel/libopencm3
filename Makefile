@@ -54,16 +54,16 @@ all: build
 
 build: lib
 
-%.genhdr:
-	@printf "  GENHDR  $*\n";
-	@./scripts/irq2nvic_h ./$*;
+%/nvic.h: %/irq.yaml ./scripts/irq2nvic_h
+	@printf "  GENHDR  ./$<\n";
+	@./scripts/irq2nvic_h ./$<;
 
-%.cleanhdr:
+%/irq.yaml.cleanhdr: 
 	@printf "  CLNHDR  $*\n";
-	@./scripts/irq2nvic_h --remove ./$*
+	-rm $*/nvic.h
 
 LIB_DIRS:=$(wildcard $(addprefix lib/,$(TARGETS)))
-$(LIB_DIRS): $(YAMLFILES:=.genhdr)
+$(LIB_DIRS): $(YAMLFILES:irq.yaml=nvic.h)
 	@printf "  BUILD   $@\n";
 	$(Q)$(MAKE) --directory=$@ SRCLIBDIR=$(SRCLIBDIR)
 
